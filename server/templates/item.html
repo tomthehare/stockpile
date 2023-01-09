@@ -1,0 +1,18 @@
+<html>
+	<body>
+		{% include "partials/config.html" %}
+
+		{% include "partials/title.html" %}
+		<h1>Item</h1>
+		Description: {{ item.description }}
+		<br>
+		Location: {{ item.location }}
+		<br>
+		<br>
+		<hr>
+		{% include "partials/search.html" %}
+		<hr>
+		{% include "partials/new_item.html" %}
+	</body>
+
+</html>

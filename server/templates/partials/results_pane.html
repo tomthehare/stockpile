@@ -1,0 +1,27 @@
+<div id="results">
+	{% if items %}
+		<table>
+			<th>Description</th>
+			<th>Location</th>
+			<th>Last Update</th>
+			<th>Created</th>
+			<th>Edit</th>
+		{% for item in items %}
+			<tr>
+				<td>{{ item.description }}</td>
+				<td>{{ item.location }}	</td>
+				<td>{{ item.get_last_update_ts_formatted() }}</td>
+				<td>{{ item.get_created_ts_formatted() }}</td>
+				<td>
+					<form action="/item">
+						<input type="hidden" name="id" value="{{ item.id }}">
+						<input type="submit" value="Edit">
+					</form>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+	{% else %}
+		NO RESULTS
+	{% endif %}
+</div>

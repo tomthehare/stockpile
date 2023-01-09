@@ -1,0 +1,16 @@
+<html>
+	<body>
+		{% include "partials/config.html" %}
+		{% include "partials/title.html" %}
+		<form action="/item" method="POST">
+			<label for="description">Description: </label>
+			<input type="text" name="description" id="description">
+			<br>
+			<label for="location">Location: </label>
+			<input type="text" name="location" id="location">
+			<br>
+			<br>
+			<input type="submit" value="Create">
+		</form>
+	</body>
+</html>

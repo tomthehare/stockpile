@@ -1,0 +1,16 @@
+<html>
+	{% include "partials/title.html" %}
+	{% include "partials/config.html" %}
+	<body>
+		{% include "partials/search.html"  %}
+		<hr />
+		<br>
+		<b>Results for <i>{{ search_term }}</i></b>
+		<br>
+		{% include "partials/results_pane.html" %}
+		<hr>
+		{% include "partials/new_item.html" %}
+		<br>
+	</body>
+
+</html>
