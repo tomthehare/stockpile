@@ -11,12 +11,16 @@ class Item:
         self.tags = []
         self.created_ts = None
         self.last_update_ts = None
+        self.deleted_ts = None
 
     def set_last_update_ts(self, ts):
         self.last_update_ts = ts
 
     def set_created_ts(self, ts):
         self.created_ts = ts
+
+    def set_deleted_ts(self, ts):
+        self.deleted_ts = ts
 
     def get_last_update_ts_formatted(self):
         if self.last_update_ts:
@@ -26,13 +30,18 @@ class Item:
         if self.created_ts:
             return datetime.fromtimestamp(self.created_ts).strftime(DATE_FORMAT)
 
+    def get_deleted_ts_formatted(self):
+        if self.deleted_ts:
+            return datetime.fromtimestamp(self.deleted_ts).strftime(DATE_FORMAT)
+
     def get_dict(self):
         return {
             'id': self.id,
             'description': self.description,
             'location': self.location,
             'created_ts': self.created_ts,
-            'last_update_ts': self.last_update_ts
+            'last_update_ts': self.last_update_ts,
+            'deleted_ts': self.deleted_ts
         }
 
 

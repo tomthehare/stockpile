@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from models.item import Item
 from utility.time_observer import get_current_time
 import json
@@ -9,7 +9,11 @@ app = Flask(__name__)
 
 DB_NAME = 'poor_db.txt'
 
-def get_items_from_db(): 
+def get_items_from_db():
+    if not os.path.exists(DB_NAME):
+        with open(DB_NAME, 'w') as f:
+            f.write('[]')
+
     with open(DB_NAME, 'r') as f:
         items = json.load(f)
 
@@ -20,10 +24,23 @@ def get_items_from_db():
         test_item.location = item['location']
         test_item.set_created_ts(item.get('created_ts', ''))
         test_item.set_last_update_ts(item.get('last_update_ts', ''))
+        test_item.set_deleted_ts(item.get('deleted_ts', None))
 
-        loaded_items.append(test_item)
+        if not test_item.get_deleted_ts_formatted():
+            loaded_items.append(test_item)
 
     return loaded_items
+
+def get_item(id) -> Item:
+    items = get_items_from_db()
+
+    found_item = None
+    for item in items:
+        if item.id == id:
+            found_item = item
+            break
+
+    return found_item
 
 @app.route('/', methods=['GET'])
 def search_form():
@@ -57,24 +74,18 @@ def search_submit():
 def present_create_item():
     return render_template('new_item.html')
 
-@app.route('/item', methods=['GET'])
+@app.route('/item')
 def view_item():
     requested_id = int(request.args.get('id'))
-    items = get_items_from_db()
 
-    found_item = None
-    for item in items:
-        if item.id == requested_id:
-            found_item = item
-            break
-
+    found_item = get_item(requested_id)
     if not found_item:
         return "No item found"
 
     return render_template('item.html', item=found_item)
             
 
-@app.route('/item', methods=['POST'])
+@app.route('/submit_item', methods=['POST'])
 def create_item():
     db_name = DB_NAME
 
@@ -99,8 +110,9 @@ def create_item():
 
     contents.append(item.get_dict())
 
-    with open('poor_db.txt', 'w') as f:
+    with open('poor_db.txt', 'w+') as f:
         f.write(json.dumps(contents, indent=2))
 
-    return redirect(url_for('item', id=new-id), code=307)
+    print(url_for('view_item', id=new_id))
+    return redirect(url_for('view_item', id=new_id), code=302)
 
